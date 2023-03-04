@@ -1,23 +1,31 @@
 const express = require("express");
 const app = express();
 const ytdl = require("ytdl-core");
-app.set("view engine", "ejs");
+const bodyParser = require('body-parser');
 
-app.get("/", (req, res) => {
-    return res.render("index");
-})
-
-
+var jsonParser = bodyParser.json({ limit: "50mb", type: 'application/json' });
+app.use(jsonParser)
 
 app.get("/download", async (req, res) => {
-    const v_id = req.query.url.split('v=')[1];
-    const info = await ytdl.getInfo(req.query.url);
-    return res.render("download", {
-        url: "https://www.youtube.com/embed/" + v_id,
-        info: info.formats.sort((a, b) => {
-            return a.mimeType < b.mimeType;
-        }),
-    });
+
+    console.log("BODY >>", req.body)
+
+    let { url } = req.body
+    let v_id = url.split('v=')[1]
+    const info = await ytdl.getInfo(url);
+    // require('fs').writeFileSync('formats.json', JSON.stringify(info.formats))
+    let yt_info = info.formats.find(_format => {
+        if (_format.qualityLabel === "720p" && _format.audioBitrate !== null && _format.qualityLabel !== null) {
+            return _format
+        }
+    })
+    return res.send({ url: yt_info.url })
+    // const v_id = req.query.url.split('v=')[1];
+
+    // const info = await ytdl.getInfo(req.query.url);
+    // let links = info.formats.sort((a, b) => {
+    //     return a.mimeType < b.mimeType;
+    // })
 });
 
 
