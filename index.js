@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 var jsonParser = bodyParser.json({ limit: "50mb", type: 'application/json' });
 app.use(jsonParser)
 
-app.post("/download", async (req, res) => {
+app.get("/download", async (req, res) => {
 
     console.log("BODY >>", req.body)
 
