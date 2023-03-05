@@ -10,9 +10,9 @@ app.post("/download", async (req, res) => {
 
     console.log("BODY >>", req.body)
 
-    let { url } = req.body
-    let v_id = url.split('v=')[1]
-    const info = await ytdl.getInfo(url);
+    // let { url } = req.query.url
+    let v_id = req.query.url.split('v=')[1]
+    const info = await ytdl.getInfo(v_id);
     // require('fs').writeFileSync('formats.json', JSON.stringify(info.formats))
     let yt_info = info.formats.find(_format => {
         if (_format.qualityLabel === "720p" && _format.audioBitrate !== null && _format.qualityLabel !== null) {
