@@ -2,8 +2,16 @@ const express = require("express");
 const app = express();
 const ytdl = require("ytdl-core");
 const bodyParser = require('body-parser');
+const cors = require("cors");
 
 var jsonParser = bodyParser.json({ limit: "50mb", type: 'application/json' });
+const corsOptions = {
+    origin: '*',
+    credentials: true,            //access-control-allow-credentials:true
+    optionSuccessStatus: 200,
+}
+
+app.use(cors(corsOptions))
 app.use(jsonParser)
 
 app.get("/download", async (req, res) => {
