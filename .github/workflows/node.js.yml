@@ -25,5 +25,5 @@ jobs:
       with:
         node-version: 20
         cache: 'npm'
-    - run: sudo npm ci
+    - run: sudo npm i
     - run: sudo npm run build --if-present
